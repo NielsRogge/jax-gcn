@@ -86,13 +86,13 @@ if __name__ == "__main__":
     val_values = []
     for epoch in range(num_epochs):
         start_time = time.time()
-        batch = (features, labels, adj, True, rng_key, idx_train)
+        batch = (features, labels, adj, True, rng_key, np.array(idx_train))
         opt_state = update(epoch, opt_state, batch)
         epoch_time = time.time() - start_time
 
         params = get_params(opt_state)
-        eval_batch = (features, labels, adj, False, rng_key, idx_val)
-        train_batch = (features, labels, adj, False, rng_key, idx_train)
+        eval_batch = (features, labels, adj, False, rng_key, np.array(idx_val))
+        train_batch = (features, labels, adj, False, rng_key, np.array(idx_train))
         train_loss, train_acc = loss_accuracy(params, train_batch)
         val_loss, val_acc = loss_accuracy(params, eval_batch)
         val_values.append(val_loss.item())
@@ -105,6 +105,6 @@ if __name__ == "__main__":
             break
     
     # now run on the test set
-    test_batch = (features, labels, adj, False, rng_key, idx_test)
+    test_batch = (features, labels, adj, False, rng_key, np.array(idx_test))
     test_acc = accuracy(params, test_batch)
     print(f'Test set acc: {test_acc}')
